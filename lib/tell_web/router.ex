@@ -1,6 +1,8 @@
 defmodule TellWeb.Router do
   use TellWeb, :router
 
+  import Phoenix.LiveView.Router
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -17,7 +19,7 @@ defmodule TellWeb.Router do
   scope "/", TellWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    live "/", IndexLive
   end
 
   # Other scopes may use custom stacks.
