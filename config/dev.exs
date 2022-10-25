@@ -16,7 +16,12 @@ config :tell, TellWeb.Endpoint,
   secret_key_base: "IYgarJt4hbYpBXg2V95y/SOlAx8rK7X2phxpxhJCRdLr7c1ZTtEoAT8j1SwoCFAW",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    sass: {
+      DartSass,
+      :install_and_run,
+      [:default, ~w(--embed-source-map --source-map-urls=absolute --watch)]
+    }
   ]
 
 # ## SSL Support

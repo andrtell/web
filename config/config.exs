@@ -14,6 +14,14 @@ config :tell, TellWeb.Endpoint,
   pubsub_server: Tell.PubSub,
   live_view: [signing_salt: "SPhxCQec"]
 
+# Configures Dart SASS
+config :dart_sass,
+  version: "1.54.5",
+  default: [
+    args: ~w(css/app.scss ../priv/static/assets/app.css),
+    cd: Path.expand("../assets", __DIR__)
+  ]
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails
