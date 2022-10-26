@@ -1,0 +1,107 @@
+#!/bin/env bash
+
+deps() {
+  if ! type -p $1 &> /dev/null 
+  then
+      echo "'$1' must be installed to run this script."
+      exit 126
+  fi
+}
+
+deps "mix"
+deps "podman"
+
+help() {
+  cat <<_EOF
+    Development helper script
+
+    usage: 
+      
+      devctl <command> [<arg> ...]
+
+    commands:
+
+      install             run the initial setup
+
+      server              mix phx.server
+      iex                 iex -S mix phx.server
+
+      postgres  start     start postgres
+      postgres  stop      stop postgres
+
+      podman    build     build container image
+      podman    push      push container image to registry
+
+      help                print help
+_EOF
+}
+
+(( $# < 1 )) && {
+    help
+    exit 126
+}
+
+case "$1" in
+    install)
+        mix deps.get
+        mix ecto.create
+        mix ecto.migrate
+        ;;
+    start)
+        mix phx.server
+        ;;
+    iex)
+        iex -S mix phx.server
+        ;;
+    postgres)
+        (( $# != 2 )) && {
+            help
+            exit 126
+        }
+        PG_STATUS=$(podman ps --filter name=builder_db --format {{.ID}})
+        case "$2" in
+          start)
+            if [ -z "$PG_STATUS" ]; then 
+              podman run \
+                -d \
+                -p 5432:5432 \
+                --name builder_db \
+                -v builder_db:/var/lib/postgresql/data \
+                -e POSTGRES_PASSWORD="postgres" \
+                postgres:14-alpine
+            else
+              echo "postgres already started .."
+            fi
+            ;;
+          stop)
+            if [ -n "$PG_STATUS" ]; then 
+              podman stop -i builder_db && podman rm -i builder_db
+            else
+              echo "postgres is not running ..."
+            fi
+            ;;
+        esac
+        ;;
+    podman)
+        (( $# != 2 )) && {
+            help
+            exit 126
+        }
+        case "$2" in
+          build)
+            podman build . -t registry.tell.nu/tell.nu
+            ;;
+          push)
+            podman push registry.tell.nu/tell.nu
+            ;;
+        esac
+        ;;
+    help)
+        help
+        ;;
+    *)
+        help
+        exit 126
+        ;;
+esac
+
