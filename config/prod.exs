@@ -15,7 +15,7 @@ config :tell, TellWeb.Endpoint, cache_static_manifest: "priv/static/cache_manife
 config :logger, level: :info
 
 # redirect to https
-config :web, SiteWeb.Endpoint, force_ssl: []
+config :web, TellWeb.Endpoint, force_ssl: []
 
 # ## SSL Support
 #
