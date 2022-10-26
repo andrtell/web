@@ -44,8 +44,6 @@ _EOF
 case "$1" in
     install)
         mix deps.get
-        mix ecto.create
-        mix ecto.migrate
         ;;
     start)
         mix phx.server
