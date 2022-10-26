@@ -1,0 +1,44 @@
+.hero, .logo {
+  aspect-ratio: 0;
+  clip-path: none;
+  background: white;
+  z-index: 100;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: white;
+}
+
+.hello {
+  background-image: url(/images/hello.svg);
+  grid-column: 5 / 14;
+  grid-row: 12 / span 2;
+}
+
+.andreas {
+  grid-column: 5 / 20;
+  grid-row: 14 / 17;
+  background-image: url(/images/andreas.svg);
+}
+
+.developer {
+  grid-column: 10 / span 10;
+  grid-row: 18 / span 2;
+  background-image: url(/images/developer.svg);
+}
+
+.linked-in {
+  grid-column: 15 / span 2;
+  grid-row: 21 / span 2;
+  background-image: url("/images/in_blue_logo_96x2.png");
+}
+
+.github {
+  grid-column: 18 / span 2;
+  grid-row: 21 / span 2;
+  background-image: url("/images/github_logo_120px.png");
+}
+
+.logo a {
+  display: block;
+  height: 100%
+}

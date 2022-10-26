@@ -1,1 +1,20 @@
-<h1>Live</h1>
+<div class="grid-container">
+  <div class="grid">
+    <div class="hero hello" />
+    <div class="hero andreas" />
+    <div class="hero developer" />
+    <div class="logo linked-in">
+      <a href="https://www.linkedin.com/in/andreas-tell-41b757118"></a>
+    </div>
+    <div class="logo github">
+      <a href="https://github.com/andrtell"></a>
+    </div>
+    <%= for cell <- @cells do %>
+      <%= if cell.alive? do %>
+        <div class={"alive dot-#{cell.dot} dot-x-#{cell.x} dot-y-#{cell.y}"}></div>
+      <% else %>
+        <div class="dead"></div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

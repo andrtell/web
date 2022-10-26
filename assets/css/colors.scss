@@ -1,0 +1,15 @@
+$colors: (
+  #5b4db7,
+  #42adc7,
+  #81d152,
+  #f5f263,
+  #ff9d4f,
+  #ff5347
+);
+
+@each $color in $colors {
+  $i: index($colors, $color);
+  .dot-#{$i} {
+    background-color: $color;
+  }
+}

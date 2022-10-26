@@ -1,0 +1,35 @@
+$grid-width: 24;
+$grid-height: 48;
+
+.grid-container {
+  height: calc(100vh - 3px);
+}
+
+.grid {
+  aspect-ratio: 1 / 2;
+  display: grid;
+  gap: 4px;
+  grid-template-columns: repeat($grid-width, 1fr);
+  margin: 0 auto;
+  max-width: calc((24 * 40px));
+  padding: 3px;
+  position: relative;
+}
+
+.grid > * {
+  aspect-ratio: 1;
+  clip-path: circle(50%);
+  transition: all 0.2s ease;
+}
+
+@for $i from 0 through ($grid-width - 1) {
+  .dot-x-#{$i} {
+    grid-column: #{$i + 1} / #{($i + 2)};
+  }
+}
+
+@for $i from 0 through ($grid-height - 1) {
+  .dot-y-#{$i} {
+    grid-row: #{$i + 1} / #{($i + 2)};
+  }
+}
