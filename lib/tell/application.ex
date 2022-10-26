@@ -13,9 +13,10 @@ defmodule Tell.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Tell.PubSub},
       # Start the Endpoint (http/https)
-      TellWeb.Endpoint
+      TellWeb.Endpoint,
       # Start a worker by calling: Tell.Worker.start_link(arg)
       # {Tell.Worker, arg}
+      Conway.Supervisor
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
