@@ -32,6 +32,19 @@ if config_env() == :prod do
       environment variable SSL_CERT_PATH is missing.
       """
 
+  logflare_api_key =
+    System.get_env("LOGFLARE_API_KEY") ||
+      raise """
+      environment variable LOGFLARE_API_KEY is missing.
+      """
+
+  logflare_source_id =
+    System.get_env("LOGFLARE_SOURCE_ID") ||
+      raise """
+      environment variable LOGFLARE_SOURCE_ID is missing.
+      """
+
+  # Configure SSL
   config :tell, TellWeb.Endpoint,
     url: [scheme: "https", host: "tell.nu", port: 443],
     http: [port: 80],
@@ -42,6 +55,23 @@ if config_env() == :prod do
       certfile: ssl_cert_path
     ],
     secret_key_base: secret_key_base
+
+  # Configure LogFlare
+  config :logflare_logger_backend,
+    # https://api.logflare.app is configured by default and you can set your own url
+    url: "https://api.logflare.app",
+    # Default LogflareLogger level is :info. Note that log messages are filtered by the :logger application first
+    level: :info,
+    # your Logflare API key, found on your dashboard
+    api_key: logflare_api_key,
+    # the Logflare source UUID, found  on your Logflare dashboard
+    source_id: logflare_source_id,
+    # minimum time in ms before a log batch is sent
+    flush_interval: 1_000,
+    # maximum number of events before a log batch is sent
+    max_batch_size: 50,
+    # optionally you can drop keys if they exist with `metadata: [drop: [:list, :keys, :to, :drop]]`
+    metadata: :all
 
   # ## Using releases
   #

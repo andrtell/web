@@ -17,6 +17,11 @@ config :logger, level: :info
 # redirect to https
 config :tell, TellWeb.Endpoint, force_ssl: []
 
+# Config logflare
+config :logger,
+  level: :info, # or other Logger level
+  backends: [LogflareLogger.HttpBackend]
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
