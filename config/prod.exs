@@ -14,6 +14,9 @@ config :tell, TellWeb.Endpoint, cache_static_manifest: "priv/static/cache_manife
 # Do not print debug messages in production
 config :logger, level: :info
 
+# redirect to https
+config :web, SiteWeb.Endpoint, force_ssl: []
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
