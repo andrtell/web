@@ -25,7 +25,7 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  config :web, SiteWeb.Endpoint,
+  config :tell, SiteWeb.Endpoint,
     url: [scheme: "https", host: "tell.nu", port: 443],
     http: [port: 80],
     https: [
