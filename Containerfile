@@ -87,6 +87,8 @@ ENV MIX_ENV="prod"
 # Only copy the final release from the build stage
 COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/tell ./
 
+RUN ln -s /app/bin/tell /app/bin/app
+
 # TODO: 
 # Certbot generates private key as root.
 # Mounted in the container user `nobody` can't read it.
