@@ -1,18 +1,14 @@
 import Config
 
-# config/runtime.exs is executed for all environments, including
-# during releases. It is executed after compilation and before the
-# system starts, so it is typically used to load production configuration
-# and secrets from environment variables or elsewhere. Do not define
-# any compile-time configuration in here, as it won't be applied.
-# The block below contains prod specific runtime configuration.
-
 # Start the phoenix server if environment is set and running in a release
+
 if System.get_env("PHX_SERVER") && System.get_env("RELEASE_NAME") do
   config :tell, TellWeb.Endpoint, server: true
 end
 
 if config_env() == :prod do
+  # Env
+
   secret_key_base =
     System.get_env("SECRET_KEY_BASE") ||
       raise """
@@ -24,12 +20,6 @@ if config_env() == :prod do
     System.get_env("SSL_KEY_PATH") ||
       raise """
       environment variable SSL_KEY_PATH is missing.
-      """
-
-  ssl_cert_path =
-    System.get_env("SSL_CERT_PATH") ||
-      raise """
-      environment variable SSL_CERT_PATH is missing.
       """
 
   logflare_api_key =
@@ -44,7 +34,25 @@ if config_env() == :prod do
       environment variable LOGFLARE_SOURCE_ID is missing.
       """
 
-  # Configure SSL
+  ssl_cert_path =
+    System.get_env("SSL_CERT_PATH") ||
+      raise """
+      environment variable SSL_CERT_PATH is missing.
+      """
+
+  # Logflare
+
+  config :logflare_logger_backend,
+    url: "https://api.logflare.app",
+    level: :info,
+    api_key: logflare_api_key,
+    source_id: logflare_source_id,
+    flush_interval: 1_000,
+    max_batch_size: 50,
+    metadata: :all
+
+  # Host / SSL
+
   config :tell, TellWeb.Endpoint,
     url: [scheme: "https", host: "tell.nu", port: 443],
     http: [port: 80],
@@ -55,33 +63,6 @@ if config_env() == :prod do
       certfile: ssl_cert_path
     ],
     secret_key_base: secret_key_base
-
-  # Configure LogFlare
-  config :logflare_logger_backend,
-    # https://api.logflare.app is configured by default and you can set your own url
-    url: "https://api.logflare.app",
-    # Default LogflareLogger level is :info. Note that log messages are filtered by the :logger application first
-    level: :info,
-    # your Logflare API key, found on your dashboard
-    api_key: logflare_api_key,
-    # the Logflare source UUID, found  on your Logflare dashboard
-    source_id: logflare_source_id,
-    # minimum time in ms before a log batch is sent
-    flush_interval: 1_000,
-    # maximum number of events before a log batch is sent
-    max_batch_size: 50,
-    # optionally you can drop keys if they exist with `metadata: [drop: [:list, :keys, :to, :drop]]`
-    metadata: :all
-
-  # ## Using releases
-  #
-  # If you are doing OTP releases, you need to instruct Phoenix
-  # to start each relevant endpoint:
-  #
-  #     config :tell, TellWeb.Endpoint, server: true
-  #
-  # Then you can assemble a release by calling `mix release`.
-  # See `mix help release` for more information.
 
   # ## Configuring the mailer
   #
