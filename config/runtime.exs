@@ -55,9 +55,9 @@ if config_env() == :prod do
 
   config :tell, TellWeb.Endpoint,
     url: [scheme: "https", host: "tell.nu", port: 443],
-    http: [port: 80],
+    http: [port: 8000],
     https: [
-      port: 443,
+      port: 4430,
       cipher_suite: :strong,
       keyfile: ssl_key_path,
       certfile: ssl_cert_path
