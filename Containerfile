@@ -84,14 +84,16 @@ RUN chown nobody /app
 # set runner ENV
 ENV MIX_ENV="prod"
 
-# Only copy the final release from the build stage
-COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/tell ./
+# create user/group: container
+RUN groupadd -g 1000 container
+RUN useradd -u 1000 -g 1000 -m -d /home/container -s /bin/bash container
 
+# Only copy the final release from the build stage
+COPY --from=builder --chown=container:root /app/_build/${MIX_ENV}/rel/tell ./
+
+# create alias builder -> app
 RUN ln -s /app/bin/tell /app/bin/app
 
-# TODO: 
-# Certbot generates private key as root.
-# Mounted in the container user `nobody` can't read it.
-USER root
+USER container
 
 CMD ["/app/bin/server"]
