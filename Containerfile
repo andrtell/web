@@ -86,7 +86,7 @@ ENV MIX_ENV="prod"
 
 # create user/group: container
 RUN groupadd -g 1000 container
-RUN useradd -u 1000 -g 1000 -m -d /home/container -s /bin/bash container
+RUN useradd -u 1000 -g 1000 -M -d /app -s /bin/bash container
 
 # Only copy the final release from the build stage
 COPY --from=builder --chown=container:root /app/_build/${MIX_ENV}/rel/tell ./
