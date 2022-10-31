@@ -40,6 +40,18 @@ if config_env() == :prod do
       environment variable SSL_CERT_PATH is missing.
       """
 
+  http_port =
+    System.get_env("HTTP_PORT") ||
+      raise """
+      environment variable HTTP_PORT is missing.
+      """
+
+  https_port =
+    System.get_env("HTTPS_PORT") ||
+      raise """
+      environment variable HTTPS_PORT is missing.
+      """
+
   # Logflare
 
   config :logflare_logger_backend,
@@ -55,9 +67,9 @@ if config_env() == :prod do
 
   config :tell, TellWeb.Endpoint,
     url: [scheme: "https", host: "tell.nu", port: 443],
-    http: [port: 8000],
+    http: [port: http_port],
     https: [
-      port: 4430,
+      port: https_port,
       cipher_suite: :strong,
       keyfile: ssl_key_path,
       certfile: ssl_cert_path
